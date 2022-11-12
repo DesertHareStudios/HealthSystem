@@ -5,13 +5,12 @@ public class Health : MonoBehaviour, IDamageable {
 
     [SerializeField] private float BaseHealth = 100f;
 
-    private float currentHealth = 100f;
-
-    public UnityEvent<float> OnHealthChanged;
     public UnityEvent<float> OnDamage;
     public UnityEvent<float> OnHeal;
     public UnityEvent OnDeath;
     public UnityEvent OnRevive;
+
+    private float currentHealth = 100f;
 
     public float CurrentHealth {
         get {
@@ -46,7 +45,6 @@ public class Health : MonoBehaviour, IDamageable {
     }
 
     public void Damage(float ammount) {
-        OnHealthChanged?.Invoke(CurrentHealth);
         CurrentHealth -= ammount;
         OnDamage?.Invoke(ammount);
         if(CurrentHealth <= 0f) {
@@ -56,7 +54,6 @@ public class Health : MonoBehaviour, IDamageable {
 
     public void Heal(float ammount) {
         CurrentHealth += ammount;
-        OnHealthChanged?.Invoke(CurrentHealth);
         OnHeal?.Invoke(ammount);
         if(CurrentHealth <= 0f) {
             OnDeath?.Invoke();
@@ -65,7 +62,6 @@ public class Health : MonoBehaviour, IDamageable {
 
     public void Kill() {
         CurrentHealth = 0f;
-        OnHealthChanged?.Invoke(CurrentHealth);
         OnDamage?.Invoke(BaseHealth);
         OnDeath?.Invoke();
     }
@@ -75,7 +71,6 @@ public class Health : MonoBehaviour, IDamageable {
             return;
         }
         HealthRatio = ratio;
-        OnHealthChanged?.Invoke(CurrentHealth);
         OnHeal?.Invoke(CurrentHealth);
         OnRevive?.Invoke();
     }
